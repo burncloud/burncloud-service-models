@@ -4,7 +4,7 @@ use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
 /// 模型类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum ModelType {
     /// 对话模型
     Chat,
@@ -55,7 +55,7 @@ pub enum ModelStatus {
 }
 
 /// 模型信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Model {
     /// 模型ID
     pub id: Uuid,
@@ -102,7 +102,7 @@ pub struct Model {
 }
 
 /// 已安装的模型实例
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct InstalledModel {
     /// 基础模型信息
     #[serde(flatten)]
@@ -124,7 +124,7 @@ pub struct InstalledModel {
 }
 
 /// 可下载的模型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AvailableModel {
     /// 基础模型信息
     #[serde(flatten)]
@@ -140,7 +140,7 @@ pub struct AvailableModel {
 }
 
 /// 系统要求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SystemRequirements {
     /// 最小内存 (GB)
     pub min_memory_gb: f32,
