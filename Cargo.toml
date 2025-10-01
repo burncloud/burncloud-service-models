@@ -22,7 +22,7 @@ async-trait = "0.1"
 
 # Local dependencies
 burncloud-database-models = { path = "../burncloud-database-models" }
-burncloud-database-core = { path = "../burncloud-database-core" }
+burncloud-database = { path = "../burncloud-database" }
 
 [dev-dependencies]
 tempfile = "3.0"

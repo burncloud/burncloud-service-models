@@ -18,7 +18,7 @@ pub struct ModelsService {
 
 impl ModelsService {
     /// Create a new ModelsService instance
-    pub async fn new(database: Arc<burncloud_database_core::Database>) -> Result<Self, ServiceError> {
+    pub async fn new(database: Arc<burncloud_database::Database>) -> Result<Self, ServiceError> {
         let database_service = Arc::new(DatabaseModelsService::new(database).await?);
         Ok(Self { database_service })
     }

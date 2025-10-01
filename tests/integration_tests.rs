@@ -4,7 +4,7 @@
 //! and core components. These tests verify end-to-end functionality.
 
 use burncloud_service_models::*;
-use burncloud_database_core::create_in_memory_database;
+use burncloud_database::create_in_memory_database;
 use std::sync::Arc;
 use std::collections::HashMap;
 use uuid::Uuid;
