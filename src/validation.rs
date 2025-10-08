@@ -263,8 +263,6 @@ pub fn validate_version(version: &str) -> ServiceResult<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ModelType;
-    use std::collections::HashMap;
 
     #[test]
     fn test_validate_model_name() {

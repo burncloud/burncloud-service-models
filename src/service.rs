@@ -337,32 +337,6 @@ pub struct ModelServiceStats {
 
 // Conversion functions between service and basic types
 
-fn service_model_to_basic(request: &CreateModelRequest) -> Result<BasicModel, ServiceError> {
-    Ok(BasicModel {
-        id: Uuid::new_v4(),
-        name: request.name.clone(),
-        display_name: request.display_name.clone(),
-        description: request.description.clone(),
-        version: request.version.clone(),
-        model_type: service_type_to_basic(request.model_type),
-        size_category: burncloud_database_models::file_size_to_category(request.file_size),
-        file_size: request.file_size,
-        provider: request.provider.clone(),
-        license: request.license.clone(),
-        tags: request.tags.clone(),
-        languages: request.languages.clone(),
-        file_path: request.file_path.clone(),
-        checksum: None, // Will be calculated later
-        download_url: request.download_url.clone(),
-        config: request.config.clone(),
-        rating: None,
-        download_count: 0,
-        is_official: request.is_official,
-        created_at: Utc::now(),
-        updated_at: Utc::now(),
-    })
-}
-
 fn service_model_to_basic_update(model: &Model) -> Result<BasicModel, ServiceError> {
     Ok(BasicModel {
         id: model.id,

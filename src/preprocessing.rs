@@ -169,7 +169,7 @@ pub async fn calculate_file_checksum(file_path: &str) -> ServiceResult<String> {
     use tokio::io::{AsyncReadExt, BufReader};
     use sha2::{Sha256, Digest};
 
-    let mut file = match File::open(file_path).await {
+    let file = match File::open(file_path).await {
         Ok(f) => f,
         Err(e) => return Err(ServiceError::internal(format!("Failed to open file: {}", e))),
     };
@@ -192,8 +192,8 @@ pub async fn calculate_file_checksum(file_path: &str) -> ServiceResult<String> {
     Ok(format!("{:x}", result))
 }
 
-/// Validates download URL format and accessibility
-pub async fn validate_download_url(url: &str) -> ServiceResult<()> {
+/// Validates download URL format
+pub fn validate_download_url(url: &str) -> ServiceResult<()> {
     use url::Url;
 
     // Parse URL
@@ -206,71 +206,12 @@ pub async fn validate_download_url(url: &str) -> ServiceResult<()> {
         _ => return Err(ServiceError::validation("URL must use HTTP or HTTPS protocol")),
     }
 
-    // Basic reachability check (HEAD request)
-    // Note: In a real implementation, you might want to make this optional
-    // or implement with a timeout and retry logic
-
     Ok(())
-}
-
-/// Estimates download time based on file size and typical connection speeds
-pub fn estimate_download_time(file_size: u64) -> std::time::Duration {
-    // Assume average download speed of 10 MB/s
-    const AVERAGE_SPEED_BYTES_PER_SEC: u64 = 10 * 1024 * 1024;
-
-    let seconds = (file_size + AVERAGE_SPEED_BYTES_PER_SEC - 1) / AVERAGE_SPEED_BYTES_PER_SEC;
-    std::time::Duration::from_secs(seconds)
-}
-
-/// Generates search keywords from model metadata for better discoverability
-pub fn generate_search_keywords(model: &Model) -> Vec<String> {
-    let mut keywords = Vec::new();
-
-    // Add name variations
-    keywords.push(model.name.clone());
-    keywords.push(model.display_name.clone());
-
-    // Add provider
-    keywords.push(model.provider.clone());
-
-    // Add model type
-    keywords.push(model.model_type.to_string());
-
-    // Add size category
-    keywords.push(model.size_category.to_string());
-
-    // Add tags
-    keywords.extend(model.tags.clone());
-
-    // Add languages
-    keywords.extend(model.languages.clone());
-
-    // Add description words if available
-    if let Some(ref description) = model.description {
-        let words: Vec<String> = description
-            .split_whitespace()
-            .filter(|word| word.len() > 3) // Only meaningful words
-            .map(|word| word.to_lowercase())
-            .collect();
-        keywords.extend(words);
-    }
-
-    // Deduplicate and normalize
-    let mut unique_keywords = std::collections::HashSet::new();
-    keywords.into_iter()
-        .map(|k| k.trim().to_lowercase())
-        .filter(|k| !k.is_empty() && k.len() > 1)
-        .for_each(|k| { unique_keywords.insert(k); });
-
-    let mut result: Vec<String> = unique_keywords.into_iter().collect();
-    result.sort();
-    result
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ModelType;
 
     #[test]
     fn test_normalize_tags() {
